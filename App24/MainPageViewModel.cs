@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
 
@@ -33,12 +34,14 @@ namespace App24
                         this.ItemTextChanged?.Invoke(this, EventArgs.Empty);
                     }
                 };
+                Debug.WriteLine("要素追加");
                 this.Items.Add(item);
             }
             else
             {
                 if (this.Items.Count == 0) { return; }
                 var item = this.Items[this.Random.Next(this.Items.Count)];
+                Debug.WriteLine("テキスト変更");
                 item.Text = string.Join("", Enumerable.Range(1, this.Random.Next(140)).Select(_ => "a").ToArray());
             }
         }

@@ -33,20 +33,27 @@ namespace App24
             this.ViewModel.ItemTextChanged += this.ViewModel_ItemTextChanged;
         }
 
-        private void ViewModel_ItemTextChanged(object sender, EventArgs e)
+        private async void ViewModel_ItemTextChanged(object sender, EventArgs e)
         {
-            this.ScrollToBottom();
+            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                this.ScrollToBottom();
+            });
         }
 
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private async void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            this.ScrollToBottom();
+            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                this.ScrollToBottom();
+            });
         }
 
         private void ScrollToBottom()
         {
             var target = this.ViewModel.Items.Last();
-            var viewItems = VisualTreeHelper.FindElementsInHostCoordinates(new Rect(0, 0, 1, this.ListBox.ActualHeight), this.ListBox, true).OfType<ListBoxItem>();
+            var viewItems = VisualTreeHelper.FindElementsInHostCoordinates(
+                new Rect(0, 0, 1, this.ListBox.ActualHeight), this.ListBox, true).OfType<ListBoxItem>();
             if (!viewItems.Any(x => x.DataContext == target))
             {
                 Debug.WriteLine("表示されてない");

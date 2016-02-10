@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -45,7 +46,16 @@ namespace App24
         private void ScrollToBottom()
         {
             var target = this.ViewModel.Items.Last();
-            this.ListBox.ScrollIntoView(target);
+            var viewItems = VisualTreeHelper.FindElementsInHostCoordinates(new Rect(0, 0, 1, this.ListBox.ActualHeight), this.ListBox, true).OfType<ListBoxItem>();
+            if (!viewItems.Any(x => x.DataContext == target))
+            {
+                Debug.WriteLine("表示されてない");
+                this.ListBox.ScrollIntoView(target);
+            }
+            else
+            {
+                Debug.WriteLine("表示されてる");
+            }
         }
     }
 }
